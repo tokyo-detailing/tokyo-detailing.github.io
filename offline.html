@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#050505" />
+    <meta name="robots" content="noindex" />
+    <title>Нет сети — Tokyo Detailing Studio</title>
+    <!--
+      Самостоятельная страница без скриптов приложения. Service worker показывает её,
+      когда нужной страницы нет в кэше, под чужим адресом (например, /garage) —
+      страница Next.js в такой ситуации пыталась бы перезагрузить себя по кругу.
+    -->
+    <style>
+      :root { color-scheme: light; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        background: #f5f5f5;
+        color: #232323;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: calc(env(safe-area-inset-top) + 28px) 20px calc(env(safe-area-inset-bottom) + 40px);
+      }
+      .logo { display: flex; align-items: center; gap: 10px; color: #0b0b0b; font-weight: 600; font-size: 19px; letter-spacing: -0.03em; }
+      h1 { margin: 72px 0 0; font-size: clamp(34px, 9vw, 56px); line-height: 1.02; letter-spacing: -0.04em; color: #0b0b0b; font-weight: 600; }
+      p { margin: 16px 0 0; max-width: 46ch; font-size: 16px; line-height: 1.5; color: rgb(35 35 35 / 0.66); }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      a, button {
+        display: inline-flex; align-items: center; height: 56px; padding: 0 32px; border-radius: 999px;
+        font: inherit; font-size: 16px; font-weight: 500; text-decoration: none; cursor: pointer; border: 0;
+      }
+      button { background: #0b0b0b; color: #fff; }
+      a { background: #fff; color: #232323; box-shadow: inset 0 0 0 1px rgb(11 11 11 / 0.14); }
+      a:focus-visible, button:focus-visible { outline: 2px solid #0b0b0b; outline-offset: 3px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="logo">
+        Tokyo Detailing Studio
+      </div>
+      <h1>Нет подключения</h1>
+      <p>
+        Эта страница не открывается без интернета. Без сети заявка не отправляется.
+        Если вы начали запись, выбранные услуги, дата и время сохранены на этом устройстве —
+        продолжите, когда сеть появится.
+      </p>
+      <div class="actions">
+        <button type="button" onclick="location.reload()">Попробовать снова</button>
+        <a href="./">На главную</a>
+      </div>
+    </main>
+      <script>
+      // Сеть вернулась — пробуем открыть нужную страницу снова. Только если страница
+      // действительно открылась без сети и пользователь не уходит с неё сам:
+      // браузер может прислать «online» в момент перехода по ссылке.
+      (function () {
+        var leaving = false;
+        var wasOffline = !navigator.onLine;
+        window.addEventListener("offline", function () { wasOffline = true; });
+        window.addEventListener("pagehide", function () { leaving = true; });
+        document.addEventListener("click", function (e) {
+          if (e.target.closest && e.target.closest("a")) leaving = true;
+        });
+        window.addEventListener("online", function () {
+          if (wasOffline && navigator.onLine && !leaving) location.reload();
+        });
+      })();
+    </script>
+  </body>
+</html>
