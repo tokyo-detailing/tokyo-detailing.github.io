@@ -23,7 +23,7 @@
  */
 // Демо-копия на GitHub Pages живёт по адресу /m-detail/: все пути считаются от области service worker.
 const BASE = new URL(self.registration.scope).pathname.replace(/\/$/, "");
-const VERSION = "tokyo-v2";
+const VERSION = "tokyo-v3";
 const STATIC = `md-static-${VERSION}`;
 const PAGES = `md-pages-${VERSION}`;
 const OFFLINE_URL = `${BASE}/offline.html`;
